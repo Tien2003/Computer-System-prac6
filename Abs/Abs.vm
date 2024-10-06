@@ -2,8 +2,27 @@
 // x & y are static variables
 
 // Put your code here.
+push static 0
 
+// Duplicate x for comparison
+push static 0
 
+// Push 0 for comparison
+push constant 0
 
+// Check if x is negative
+lt
+if-goto MAKE_POSITIVE
+goto STORE_RESULT
+
+label MAKE_POSITIVE
+neg
+goto STORE_RESULT
+
+label STORE_RESULT
+// Store the result in y (static 1)
+pop static 1
+
+// Infinite loop to end the program
 label END
 goto END
