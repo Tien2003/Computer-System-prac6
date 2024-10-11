@@ -3,8 +3,121 @@
 // x & y are static variables
 
 // Put your code here.
+push constant 0
+pop local 0
+
+push static 0
+push constant 0
+eq
+if-goto END
+
+push static 1
+push constant 0
+eq
+if-goto END
+
+// abs(Y)
+push static 1
+push constant 0
+gt
+if-goto posY
+push static 1
+neg
+pop static 4
+goto contY
+label posY
+push static 1
+pop static 4
+
+label contY
+
+// abs(X)
+push static 0
+push constant 0
+gt
+if-goto posX
+push static 0
+neg
+pop static 3
+
+goto contX
+label posX
+push static 0
+pop static 3
+
+label contX
 
 
+
+
+// multiply
+push static 3
+push static 4
+gt
+if-goto xGTy
+
+// x<y
+push static 3
+pop static 2
+
+label aLoop
+push static 4
+push local 0
+add
+pop local 0
+
+push static 2
+push constant 1
+sub
+pop static 2
+push static 2
+push constant 0
+gt
+if-goto aLoop
+goto checkNeg
+
+// x > y
+label xGTy
+push static 4
+pop static 2
+
+label bLoop
+push static 3
+push local 0
+add
+pop local 0
+
+push static 2
+push constant 1
+sub
+pop static 2
+
+push static 2
+push constant 0
+gt
+if-goto bLoop
+
+
+// x,y < 0
+label checkNeg
+push static 0
+push constant 0
+gt
+if-goto temp1
+push local 0
+neg
+pop local 0
+
+label temp1
+push static 1
+push constant 0
+gt
+if-goto temp2
+push local 0
+neg
+pop local 0
+
+label temp2
 
 label END
 goto END
