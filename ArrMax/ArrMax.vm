@@ -3,3 +3,59 @@
 
 // Put your code here.
 
+function ArrMax.arrMax 2
+// length(arr) <= 0
+push argument 1
+push constant 1
+lt
+if-goto exitPro
+
+
+push constant 0
+pop temp 0
+
+push argument 0
+pop pointer 1 
+
+push that 0
+pop temp 1
+
+label loop
+push temp 0
+push constant 1
+add
+pop temp 0
+
+push argument 1
+push temp 0
+eq
+if-goto loopEnd
+
+push argument 0
+push temp 0
+add
+pop pointer 1
+
+push that 0
+pop temp 2
+
+push temp 2
+push temp 1
+gt
+if-goto newNew
+goto loop
+
+label newNew
+push temp 2
+pop temp 1
+goto loop
+
+label loopEnd
+
+
+push temp 1
+return
+
+label exitPro
+push constant 0
+return
