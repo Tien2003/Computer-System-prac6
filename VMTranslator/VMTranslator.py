@@ -3,29 +3,25 @@ def reformatSegment(segment, offset):
         return "THIS"
 
     if (segment == "that"):
-        return"THAT"
+        return "THAT"
 
     if (segment == "argument"):
         return "ARG"
     
     if (segment == "local"):
-        return"LCL"
-    
-    if (segment == "pointer"):
-        return "R" + str(3 + offset)
-    
+        return "LCL"
     
     if (segment == "static"):
         return str(16+offset)
 
-
+    if (segment == "pointer"):
+        return "R" + str(3 + offset)
 
     if (segment == "temp"):
         return "R" + str(5 + offset)
 
     if (segment == "constant"):
         return str(offset)
-    
     
     return segment
 
@@ -39,7 +35,6 @@ class VMTranslator:
 
     def vm_push(segment, offset):
         '''Generate Hack Assembly code for a VM push operation'''
-        
         refSeg = reformatSegment(segment, offset)
         retString = ""
         if (segment == "constant" or segment == "static" or segment == "pointer" or segment == "temp"):
@@ -48,7 +43,6 @@ class VMTranslator:
                 retString += "D = A\n"
             else:
                 retString += "D = M\n"
-                
         elif (segment == "local" or segment == "this" or segment == "that" or segment == "argument"):
             retString += "@" + refSeg + "\n"
             retString += "D = M\n"
@@ -71,7 +65,6 @@ class VMTranslator:
         
         if (segment == "static" or segment == "temp" or segment == "pointer"):
             retString += "D = A\n"
-            
         elif (segment == "local" or segment == "this" or segment == "that" or segment == "argument"):
             retString += "D = M\n"
             retString += "@" + str(offset) + "\n"
@@ -95,6 +88,7 @@ class VMTranslator:
         retString += "D = M\n"
         retString += "A = A-1\n"
         retString += "M = D + M"
+
         return retString
 
     def vm_sub():
@@ -104,6 +98,7 @@ class VMTranslator:
         retString += "D = M\n"
         retString += "A = A-1\n"
         retString += "M = M - D"
+
         return retString
 
     def vm_neg():
@@ -112,31 +107,29 @@ class VMTranslator:
         retString += "A = M-1\n"
         retString += "M = !M\n"
         retString += "M = M + 1"
+
         return retString
 
     def vm_eq():
         '''Generate Hack Assembly code for a VM eq operation'''
         label = VMTranslator.newLabel()
+
         retString = "@SP\n"
         retString += "AM = M-1\n"
         retString += "D = M\n"
         retString += "A = A-1\n"
         retString += "D = M - D\n"
-        
         retString += "@EQ.true_" + label + "\n"
         retString += "D;JEQ\n"
         retString += "@SP\n"
         retString += "A = M-1\n"
         retString += "M = 0\n"
-        
         retString += "@EQ.skip_" + label + "\n"
         retString += "0;JMP\n"
-        
         retString += "(EQ.true_"+ label +")\n"
         retString += "@SP\n"
         retString += "A = M-1\n"
         retString += "M = -1\n"
-        
         retString += "(EQ.skip_"+ label + ")"
         return retString
 
@@ -170,21 +163,17 @@ class VMTranslator:
         retString += "D = M\n"
         retString += "A = A-1\n"
         retString += "D = M - D\n"
-        
         retString += "@LT.true" + label + "\n"
         retString += "D;JLT\n"
         retString += "@SP\n"
         retString += "A = M-1\n"
         retString += "M = 0\n"
-        
         retString += "@LT.skip" + label + "\n"
         retString += "0;JMP\n"
-        
         retString += "(LT.true"+ label +")\n"
         retString += "@SP\n"
         retString += "A = M-1\n"
         retString += "M = -1\n"
-        
         retString += "(LT.skip"+ label + ")"
         return retString
 
@@ -230,7 +219,6 @@ class VMTranslator:
         retString = "@SP\n"
         retString += "AM = M-1\n"
         retString += "D = M\n"
-        
         retString += "@" + label + "\n"
         retString += "D;JNE"
 
@@ -256,13 +244,11 @@ class VMTranslator:
 
         retString = "@SP\n"
         retString += "D=M\n"
-        
         retString += "@R13\n"
         retString += "M=D\n"
         
         retString += "@RET."+label+"\n"
         retString += "D=A\n"
-        
         retString += "@SP\n"
         retString += "A=M\n"
         retString += "M=D\n"
@@ -272,7 +258,6 @@ class VMTranslator:
 
         retString += "@LCL\n"
         retString += "D=M\n"
-        
         retString += "@SP\n"
         retString += "A=M\n"
         retString += "M=D\n"
@@ -282,7 +267,6 @@ class VMTranslator:
 
         retString += "@ARG\n"
         retString += "D=M\n"
-        
         retString += "@SP\n"
         retString += "A=M\n"
         retString += "M=D\n"
@@ -292,7 +276,6 @@ class VMTranslator:
 
         retString += "@THIS\n"
         retString += "D=M\n"
-        
         retString += "@SP\n"
         retString += "A=M\n"
         retString += "M=D\n"
@@ -332,21 +315,25 @@ class VMTranslator:
         retString = "@LCL\n"
         retString += "D=M\n"
         retString += "@5\n"
-        
         retString += "A=D-A\n"
         retString += "D=M\n"
         retString += "@R13\n"
         retString += "M=D\n"
+
+
         retString += "@SP\n"
         retString += "A=M-1\n"
         retString += "D=M\n"
         retString += "@ARG\n"
         retString += "A=M\n"
         retString += "M=D\n"
-        
+
+
         retString += "D=A+1\n"
         retString += "@SP\n"
         retString += "M=D\n"
+
+
         retString += "@LCL\n"
         retString += "AM=M-1\n"
         retString += "D=M\n"
@@ -359,20 +346,19 @@ class VMTranslator:
         retString += "D=M\n"
         retString += "@THIS\n"
         retString += "M=D\n"
+
         retString += "@LCL\n"
         retString += "AM=M-1\n"
         retString += "D=M\n"
-        
         retString += "@ARG\n"
         retString += "M=D\n"
-        
+
         retString += "@LCL\n"
         retString += "A=M-1\n"
         retString += "D=M\n"
-        
         retString += "@LCL\n"
         retString += "M=D\n"
-        
+
         retString += "@R13\n"
         retString += "A=M\n"
         retString += "0;JMP"
